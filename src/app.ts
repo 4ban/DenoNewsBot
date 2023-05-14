@@ -18,7 +18,7 @@ export const lastUpdated: LastUpdated = {
 let lastCheck: Dayjs | string | undefined;
 
 console.log("Start CRON schedules!");
-cron("30 0 * * *", async () => {
+cron("30 5 * * *", async () => {
   console.log("RUN curiocity parser");
   lastCheck = dayjs();
   const { data, latestPost } = await curiocityParser();
@@ -35,7 +35,7 @@ cron("30 0 * * *", async () => {
 const app = express();
 
 app.get("/", (req, res) => {
-  res.json({ serverTime, time: dayjs(), lastCheck, lastUpdated });
+  res.json({ serverTime, time: dayjs().toString(), lastCheck, lastUpdated });
 });
 
 app.listen(8000);
