@@ -3,7 +3,7 @@ import { cron } from "https://deno.land/x/deno_cron/cron.ts";
 import { Dayjs } from "https://esm.sh/dayjs";
 import "./lib/parser.ts";
 import { sendMessage } from "./lib/telegram.ts";
-import { curiocityParser } from "./lib/parser.ts";
+import { serverTime, curiocityParser } from "./lib/parser.ts";
 import { escape, delay } from "./lib/utils.ts";
 
 type LastUpdated = {
@@ -32,7 +32,7 @@ cron("30 0 * * *", async () => {
 const app = express();
 
 app.get("/", (req, res) => {
-  res.json({ lastUpdated });
+  res.json({ serverTime, lastUpdated });
 });
 
 app.listen(8000);

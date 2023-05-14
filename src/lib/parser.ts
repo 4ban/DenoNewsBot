@@ -32,6 +32,7 @@ const sourceFilter = () => {
   sourceTable.twitter = sources.filter((i) => i.type === "twitter");
 };
 sourceFilter();
+export const serverTime = dayjs();
 
 export const curiocityParser = async () => {
   const data: { url: string; title: string; date?: Dayjs | string }[] = [];
