@@ -1,6 +1,6 @@
 import express from "https://esm.sh/express@4.18.2";
 import { cron } from "https://deno.land/x/deno_cron/cron.ts";
-import { Dayjs } from "https://esm.sh/dayjs";
+import dayjs, { Dayjs } from "https://esm.sh/dayjs";
 import "./lib/parser.ts";
 import { sendMessage } from "./lib/telegram.ts";
 import { serverTime, curiocityParser } from "./lib/parser.ts";
@@ -15,9 +15,12 @@ export const lastUpdated: LastUpdated = {
   twitter: "",
 };
 
+let lastCheck: Dayjs | string | undefined;
+
 console.log("Start CRON schedules!");
 cron("30 0 * * *", async () => {
   console.log("RUN curiocity parser");
+  lastCheck = dayjs();
   const { data, latestPost } = await curiocityParser();
   if (data.length) {
     lastUpdated.curiocity = latestPost;
@@ -32,7 +35,7 @@ cron("30 0 * * *", async () => {
 const app = express();
 
 app.get("/", (req, res) => {
-  res.json({ serverTime, lastUpdated });
+  res.json({ serverTime, time: dayjs(), lastCheck, lastUpdated });
 });
 
 app.listen(8000);
