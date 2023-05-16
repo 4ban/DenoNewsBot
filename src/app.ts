@@ -114,4 +114,12 @@ app.post("/", (req: Request, res: Response) => {
   }
 });
 
+app.get("/wakeup", (_req: Request, res: Response) => {
+  res.json({
+    wakeupTime: dayjs().toString(),
+    lastUpdated,
+    historyLog,
+  });
+});
+
 app.listen(8000);
