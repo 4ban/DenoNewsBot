@@ -1,5 +1,4 @@
 import axiod from "https://deno.land/x/axiod/mod.ts";
-
 import dayjs, { Dayjs } from "https://esm.sh/dayjs";
 import utc from "https://esm.sh/dayjs/plugin/utc";
 import timezone from "https://esm.sh/dayjs/plugin/timezone";
@@ -58,15 +57,6 @@ export const curiocityParser = async () => {
           } else if (["hour", "hours"].includes(elapsedDate[1])) {
             newDate = newDate.subtract(Number(elapsedDate[0]), "hour");
           }
-          console.log(
-            `${dayjs()
-              .set("minute", 0)
-              .set("second", 0)} - ${elapsedDate} - ${newDate} - ${$(post)
-              .find("h3.card__title")
-              .text()
-              .trim()}`
-          );
-
           if (
             !lastUpdated.curiocity ||
             dayjs(newDate).isAfter(lastUpdated.curiocity, "hour")
