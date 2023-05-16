@@ -48,6 +48,30 @@ cron("30 5 * * *", async () => {
   }
 });
 
+cron("30 0 * * *", async () => {
+  lastCheck = dayjs();
+  const { data, latestPost } = await curiocityParser();
+  logger({
+    date: lastCheck,
+    message: "Run CRON job 30 0 * * *",
+    data,
+    latestPost,
+  });
+  if (data.length) {
+    lastUpdated.curiocity = latestPost;
+    for await (const item of data) {
+      const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
+      await sendMessage(message);
+      await delay(4000);
+      logger({
+        date: dayjs(),
+        message: "Message sent!",
+        data: message,
+      });
+    }
+  }
+});
+
 const app = express();
 app.use(bodyParser.json());
 
