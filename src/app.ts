@@ -52,6 +52,10 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get("/", (_req: Request, res: Response) => {
+  logger({
+    date: dayjs(),
+    message: "GET / request",
+  });
   res.json({
     serverTime,
     time: dayjs().toString(),
@@ -74,6 +78,10 @@ app.post("/", (req: Request, res: Response) => {
     if (message) {
       sendMessage(message);
       res.json({ message: "Successfully sent" });
+      logger({
+        date: dayjs(),
+        message: "POST / request message was sent",
+      });
     } else {
       throw new Error("Nothing to send");
     }
