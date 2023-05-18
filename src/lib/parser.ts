@@ -80,7 +80,7 @@ export const curiocityParser = async () => {
 
   return {
     data: sortedData,
-    latestPost: sortedData[sortedData.length - 1].date,
+    latestPost: sortedData.length ? sortedData[sortedData.length - 1].date : "",
   };
 };
 

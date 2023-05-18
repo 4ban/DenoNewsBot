@@ -24,29 +24,6 @@ logger({
   date: dayjs(),
   message: "App starting",
 });
-cron("30 5 * * *", async () => {
-  lastCheck = dayjs();
-  const { data, latestPost } = await curiocityParser();
-  logger({
-    date: lastCheck,
-    message: "Run CRON job 30 5 * * *",
-    data,
-    latestPost,
-  });
-  if (data.length) {
-    lastUpdated.curiocity = latestPost;
-    for await (const item of data) {
-      const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
-      await sendMessage(message);
-      await delay(4000);
-      logger({
-        date: dayjs(),
-        message: "Message sent!",
-        data: message,
-      });
-    }
-  }
-});
 
 cron("30 0 * * *", async () => {
   lastCheck = dayjs();
@@ -63,11 +40,6 @@ cron("30 0 * * *", async () => {
       const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
       await sendMessage(message);
       await delay(4000);
-      logger({
-        date: dayjs(),
-        message: "Message sent!",
-        data: message,
-      });
     }
   }
 });
@@ -114,6 +86,7 @@ app.post("/", (req: Request, res: Response) => {
   }
 });
 
+// Service endpoint
 app.get("/wakeup", (_req: Request, res: Response) => {
   res.json({
     wakeupTime: dayjs().toString(),
