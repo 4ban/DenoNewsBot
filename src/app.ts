@@ -44,6 +44,19 @@ cron("30 0 * * *", async () => {
   }
 });
 
+cron("0 8 * * 1", async () => {
+  lastCheck = dayjs();
+  logger({
+    date: lastCheck,
+    message: "Run CRON job 0 8 * * 1",
+    data: "Weekly post",
+  });
+  const message = `${escape(
+    "Еженедельный пост знакомство! Оставляйте анкеты в комментариях: город (район), возраст, интересы"
+  )}`;
+  await sendMessage(message);
+});
+
 const app = express();
 app.use(bodyParser.json());
 
