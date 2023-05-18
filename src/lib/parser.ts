@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "https://esm.sh/dayjs";
 import utc from "https://esm.sh/dayjs/plugin/utc";
 import timezone from "https://esm.sh/dayjs/plugin/timezone";
 import * as cheerio from "https://esm.sh/cheerio@1.0.0-rc.12";
+import { findUserId, getTweets } from "./twitter.ts";
 
 import sources from "../sources.json" assert { type: "json" };
 import { lastUpdated } from "../app.ts";
@@ -34,7 +35,11 @@ sourceFilter();
 export const serverTime = dayjs();
 
 export const curiocityParser = async () => {
-  const data: { url: string; title: string; date?: Dayjs | string }[] = [];
+  const data: {
+    url: string | undefined;
+    title: string;
+    date?: Dayjs | string;
+  }[] = [];
   if (sourceTable.curiocity) {
     for (const source of sourceTable.curiocity) {
       try {
@@ -84,4 +89,51 @@ export const curiocityParser = async () => {
   };
 };
 
-export const twitterParser = () => {};
+export const twitterParser = async () => {
+  const resultData: {
+    url: string | undefined;
+    title: string;
+    date?: Dayjs | string;
+  }[] = [];
+  if (sourceTable.twitter) {
+    for (const source of sourceTable.twitter) {
+      try {
+        const {
+          data: {
+            data: { id },
+          },
+        } = await findUserId(source.url);
+        if (id) {
+          const {
+            data: { data },
+          } = await getTweets(id);
+          data.forEach((tweet: any) => {
+            if (
+              !lastUpdated.twitter ||
+              dayjs(tweet.created_at).isAfter(lastUpdated.twitter, "minute")
+            ) {
+              resultData.push({
+                date: dayjs(tweet.created_at),
+                title: tweet.text,
+                url: `https://twitter.com/${source.url}/status/${tweet.id}`,
+              });
+            }
+          });
+        } else {
+          throw new Error("No id found");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  const sortedData = resultData.sort((a, b) =>
+    dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1
+  );
+
+  return {
+    data: sortedData,
+    latestPost: sortedData.length ? sortedData[sortedData.length - 1].date : "",
+  };
+};

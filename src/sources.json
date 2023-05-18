@@ -10,5 +10,17 @@
   {
     "type": "curiocity",
     "url": "https://curiocity.com/category/things-to-do/?city=vancouver"
+  },
+  {
+    "type":"twitter",
+    "url": "SqReporter"
+  },
+  {
+    "type":"twitter",
+    "url": "VanConventions"
+  },
+  {
+    "type":"twitter",
+    "url": "Vancouver"
   }
 ]

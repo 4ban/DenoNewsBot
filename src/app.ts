@@ -5,7 +5,7 @@ import { cron } from "https://deno.land/x/deno_cron/cron.ts";
 import dayjs, { Dayjs } from "https://esm.sh/dayjs";
 import "./lib/parser.ts";
 import { sendMessage } from "./lib/telegram.ts";
-import { serverTime, curiocityParser } from "./lib/parser.ts";
+import { serverTime, curiocityParser, twitterParser } from "./lib/parser.ts";
 import { historyLog, logger } from "./lib/logger.ts";
 import { escape, delay } from "./lib/utils.ts";
 
@@ -25,12 +25,13 @@ logger({
   message: "App starting",
 });
 
+// Curiocity job
 cron("30 0 * * *", async () => {
   lastCheck = dayjs();
   const { data, latestPost } = await curiocityParser();
   logger({
     date: lastCheck,
-    message: "Run CRON job 30 0 * * *",
+    message: "Run CRON Curiocity job 30 0 * * *",
     data,
     latestPost,
   });
@@ -55,6 +56,26 @@ cron("0 8 * * 1", async () => {
     "Еженедельный пост знакомство! Оставляйте анкеты в комментариях: город (район), возраст, интересы"
   )}`;
   await sendMessage(message);
+});
+
+// Twitter job
+cron("30 8 * * *", async () => {
+  lastCheck = dayjs();
+  const { data, latestPost } = await twitterParser();
+  logger({
+    date: lastCheck,
+    message: "Run CRON Twitter job 30 8 * * *",
+    data,
+    latestPost,
+  });
+  if (data.length) {
+    lastUpdated.twitter = latestPost;
+    for await (const item of data) {
+      const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
+      await sendMessage(message);
+      await delay(4000);
+    }
+  }
 });
 
 const app = express();
