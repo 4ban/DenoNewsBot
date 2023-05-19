@@ -45,7 +45,7 @@ cron("30 0 * * *", async () => {
   }
 });
 
-cron("0 8 * * 1", async () => {
+cron("0 8 * * 5", async () => {
   lastCheck = dayjs();
   logger({
     date: lastCheck,
