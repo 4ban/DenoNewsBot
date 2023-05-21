@@ -7,7 +7,7 @@ import "./lib/parser.ts";
 import { sendMessage } from "./lib/telegram.ts";
 import { serverTime, curiocityParser, twitterParser } from "./lib/parser.ts";
 import { historyLog, logger } from "./lib/logger.ts";
-import { escape, delay } from "./lib/utils.ts";
+import { escape, delay, readState, saveState } from "./lib/utils.ts";
 
 type LastUpdated = {
   curiocity: Dayjs | string | undefined;
@@ -25,6 +25,11 @@ logger({
   message: "App starting",
 });
 
+const state = await readState();
+for (const key in state) {
+  (lastUpdated as any)[key] = state[key];
+}
+
 // Curiocity job
 cron("30 0 * * *", async () => {
   lastCheck = dayjs();
@@ -37,6 +42,7 @@ cron("30 0 * * *", async () => {
   });
   if (data.length) {
     lastUpdated.curiocity = latestPost;
+    await saveState(lastUpdated);
     for await (const item of data) {
       const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
       await sendMessage(message);
@@ -70,6 +76,7 @@ cron("30 8 * * *", async () => {
   });
   if (data.length) {
     lastUpdated.twitter = latestPost;
+    await saveState(lastUpdated);
     for await (const item of data) {
       const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
       await sendMessage(message);

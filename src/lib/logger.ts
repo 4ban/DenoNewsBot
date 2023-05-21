@@ -5,7 +5,11 @@ type LogType = {
   message: string;
   data?:
     | string
-    | { url: string; title: string; date?: string | Dayjs | undefined }[];
+    | {
+        url: string | undefined;
+        title: string;
+        date?: string | Dayjs | undefined;
+      }[];
   latestPost?: Dayjs | string;
 };
 
