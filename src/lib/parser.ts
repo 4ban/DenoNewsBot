@@ -47,39 +47,36 @@ export const curiocityParser = async () => {
         const $ = cheerio.load(response.data);
         const posts = $("div.latest-stories").find("article.card");
         posts.each((_i: number, post: any) => {
-          const elapsedDate = $(post)
-            .find("span.card__date")
-            .text()
-            .trim()
-            .split(" ");
-
-          let newDate: string | Dayjs = dayjs()
-            .set("minute", 0)
-            .set("second", 0);
-
-          if (["day", "days"].includes(elapsedDate[1])) {
-            newDate = newDate.subtract(Number(elapsedDate[0]), "day");
-          } else if (["hour", "hours"].includes(elapsedDate[1])) {
-            newDate = newDate.subtract(Number(elapsedDate[0]), "hour");
-          }
-          if (
-            !lastUpdated.curiocity ||
-            dayjs(newDate).isAfter(lastUpdated.curiocity, "hour")
-          ) {
-            data.push({
-              url: $(post).find("a.card__link").attr("href"),
-              title: $(post).find("h3.card__title").text().trim(),
-              date: newDate.toString(),
-            });
-          }
+          data.push({
+            url: $(post).find("a.card__link").attr("href"),
+            title: $(post).find("h3.card__title").text().trim(),
+          });
         });
       } catch (err) {
         console.log(err);
       }
     }
+
+    if (data) {
+      for (const source of data) {
+        try {
+          const html = await axiod.get(source.url ? source.url : "");
+          const $ = cheerio.load(html.data);
+          const postDate = $("dl.post__date time").text().trim();
+          source.date = dayjs(postDate);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
   }
 
-  const sortedData = data.sort((a, b) =>
+  const filteredData = data.filter((item) =>
+    lastUpdated.curiocity
+      ? dayjs(item.date).isAfter(lastUpdated.curiocity)
+      : item
+  );
+  const sortedData = filteredData.sort((a, b) =>
     dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1
   );
 
