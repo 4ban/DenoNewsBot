@@ -4,4 +4,4 @@ EXPOSE 8000
 ADD . /app
 USER deno
 RUN deno cache src/app.ts
-CMD ["run", "--allow-net","--allow-read", "--allow-env", "src/app.ts"]
+CMD ["run", "--allow-net","--allow-read","--allow-write", "--allow-env", "src/app.ts"]
