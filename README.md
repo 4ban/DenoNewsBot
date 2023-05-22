@@ -1,5 +1,5 @@
 # A Deno based parsing service
-It parses few sources with using cheerio or source API is possible and sends news into a Telegram channel via its REST API
+The goal of this project is to develop a Deno-based parsing service capable of extracting news from multiple sources. Utilizing cheerio or source API, the service gathers news content and transmits it to a Telegram channel via its REST API. 
 
 ## Installation and Running
 ```bash
@@ -10,7 +10,7 @@ docker compose up --build
 ```
 
 ## Deployment
-The bot is deployed on a private server under firewall and there is no public access to its API from the internet. 
+Deployed on a private server behind a firewall and doesn't have a public access from the internet.
 
 The bot is installed in this Telegram channel: [https://t.me/shortbc](https://t.me/shortbc)
 
