@@ -56,7 +56,7 @@ cron("30 0 * * *", async () => {
   }
 });
 
-cron("0 8 * * 5", async () => {
+cron("0 17 * * 5", async () => {
   lastCheck = dayjs();
   logger({
     date: lastCheck,
@@ -70,7 +70,7 @@ cron("0 8 * * 5", async () => {
 });
 
 // Twitter job
-cron("30 8 * * *", async () => {
+cron("0 */5 * * *", async () => {
   lastCheck = dayjs();
   const { data, errors, latestPost } = await twitterParser();
   logger({
