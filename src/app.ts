@@ -33,16 +33,21 @@ for (const key in state) {
 // Curiocity job
 cron("30 0 * * *", async () => {
   lastCheck = dayjs();
-  const { data, latestPost } = await curiocityParser();
+  const { data, errors, latestPost } = await curiocityParser();
   logger({
     date: lastCheck,
     message: "Run CRON Curiocity job 30 0 * * *",
     data,
+    errors,
     latestPost,
   });
   if (data.length) {
     lastUpdated.curiocity = latestPost;
-    await saveState(lastUpdated);
+    const res = await saveState(lastUpdated);
+    logger({
+      date: dayjs(),
+      message: res,
+    });
     for await (const item of data) {
       const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
       await sendMessage(message);
@@ -67,16 +72,21 @@ cron("0 8 * * 5", async () => {
 // Twitter job
 cron("30 8 * * *", async () => {
   lastCheck = dayjs();
-  const { data, latestPost } = await twitterParser();
+  const { data, errors, latestPost } = await twitterParser();
   logger({
     date: lastCheck,
     message: "Run CRON Twitter job 30 8 * * *",
     data,
+    errors,
     latestPost,
   });
   if (data.length) {
     lastUpdated.twitter = latestPost;
-    await saveState(lastUpdated);
+    const res = await saveState(lastUpdated);
+    logger({
+      date: dayjs(),
+      message: res,
+    });
     for await (const item of data) {
       const message = `${escape(item.title)}\n\n[Open in browser](${item.url})`;
       await sendMessage(message);

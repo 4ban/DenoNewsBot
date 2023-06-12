@@ -40,6 +40,8 @@ export const curiocityParser = async () => {
     title: string;
     date?: Dayjs | string;
   }[] = [];
+  const errors: string[] = [];
+
   if (sourceTable.curiocity) {
     for (const source of sourceTable.curiocity) {
       try {
@@ -53,7 +55,7 @@ export const curiocityParser = async () => {
           });
         });
       } catch (err) {
-        console.log(err);
+        errors.push(err.message);
       }
     }
 
@@ -65,7 +67,7 @@ export const curiocityParser = async () => {
           const postDate = $("dl.post__date time").text().trim();
           source.date = dayjs(postDate);
         } catch (err) {
-          console.log(err);
+          errors.push(err.message);
         }
       }
     }
@@ -82,6 +84,7 @@ export const curiocityParser = async () => {
 
   return {
     data: sortedData,
+    errors,
     latestPost: sortedData.length ? sortedData[sortedData.length - 1].date : "",
   };
 };
@@ -92,6 +95,8 @@ export const twitterParser = async () => {
     title: string;
     date?: Dayjs | string;
   }[] = [];
+  const errors: string[] = [];
+
   if (sourceTable.twitter) {
     for (const source of sourceTable.twitter) {
       try {
@@ -120,7 +125,7 @@ export const twitterParser = async () => {
           throw new Error("No id found");
         }
       } catch (err) {
-        console.log(err);
+        errors.push(err.message);
       }
     }
   }
@@ -131,6 +136,7 @@ export const twitterParser = async () => {
 
   return {
     data: sortedData,
+    errors,
     latestPost: sortedData.length ? sortedData[sortedData.length - 1].date : "",
   };
 };

@@ -36,8 +36,9 @@ export const saveState = async (text: string | {}) => {
       `${Deno.cwd()}/src/config.json`,
       JSON.stringify(text)
     );
+    return `State save success: ${text}`;
   } catch (e) {
-    console.error(e);
+    return `State save failed: ${e.message}`;
   }
 };
 

@@ -10,6 +10,7 @@ type LogType = {
         title: string;
         date?: string | Dayjs | undefined;
       }[];
+  errors?: string[];
   latestPost?: Dayjs | string;
 };
 
