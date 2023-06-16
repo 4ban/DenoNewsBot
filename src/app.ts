@@ -69,6 +69,7 @@ cron("0 17 * * 5", async () => {
   await sendMessage(message);
 });
 
+// Due to new Twitter API limitations this job won't be used anymore
 // Twitter job
 cron("0 */5 * * *", async () => {
   lastCheck = dayjs();

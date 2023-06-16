@@ -89,6 +89,7 @@ export const curiocityParser = async () => {
   };
 };
 
+// Free Twitter API since recently allows the POST requests only. So, we won't use this anymore
 export const twitterParser = async () => {
   const resultData: {
     url: string | undefined;
