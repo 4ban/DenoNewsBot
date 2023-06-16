@@ -55,7 +55,7 @@ export const curiocityParser = async () => {
           });
         });
       } catch (err) {
-        errors.push(err.message);
+        errors.push(err);
       }
     }
 
@@ -67,7 +67,7 @@ export const curiocityParser = async () => {
           const postDate = $("dl.post__date time").text().trim();
           source.date = dayjs(postDate);
         } catch (err) {
-          errors.push(err.message);
+          errors.push(err);
         }
       }
     }
@@ -125,7 +125,7 @@ export const twitterParser = async () => {
           throw new Error("No id found");
         }
       } catch (err) {
-        errors.push(err.message);
+        errors.push(err);
       }
     }
   }
