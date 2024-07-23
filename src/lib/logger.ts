@@ -21,4 +21,8 @@ export const logger = (record: LogType) => {
     dayjs(item.date).isAfter(storeDate)
   );
   historyLog = [...updatedLog, record];
+  if (record) console.log(`[${record.date}] ${record.message}`);
+  if (record.errors) {
+    console.error(`[${record.date}] ${record.message}-> ${record.errors}`);
+  }
 };

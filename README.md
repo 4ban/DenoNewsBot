@@ -14,3 +14,4 @@ Deployed on a private server behind a firewall and doesn't have a public access 
 
 The bot is installed in this Telegram channel: [https://t.me/shortbc](https://t.me/shortbc)
 
+PUPPETEER_PRODUCT=chrome deno run -A --unstable https://deno.land/x/puppeteer@16.2.0/install.ts

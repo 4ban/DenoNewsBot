@@ -1,4 +1,4 @@
-// @deno-types="https://esm.sh/express:@types/express@4"
+// @deno-types="npm:@types/express@4.17.15"
 import express, { Request, Response } from "https://esm.sh/express@4.18.2";
 import bodyParser from "https://esm.sh/body-parser@latest";
 import { cron } from "https://deno.land/x/deno_cron/cron.ts";
@@ -147,4 +147,34 @@ app.get("/wakeup", (_req: Request, res: Response) => {
   });
 });
 
-app.listen(8000);
+// Service endpoint
+app.get("/curiocity", async (_req: Request, res: Response) => {
+  logger({
+    date: dayjs(),
+    message: "GET /curiocity request",
+  });
+  const { data, errors, latestPost } = await curiocityParser();
+  res.json({
+    serverTime,
+    time: dayjs().toString(),
+    errors,
+    latestPost,
+    data,
+  });
+});
+// app.get("/viawesome", async (_req: Request, res: Response) => {
+//   logger({
+//     date: dayjs(),
+//     message: "GET /viawesome request",
+//   });
+//   const { data, errors, latestPost } = await viawesomeParser();
+//   res.json({
+//     serverTime,
+//     time: dayjs().toString(),
+//     errors,
+//     latestPost,
+//     data,
+//   });
+// });
+
+app.listen(8100);

@@ -1,6 +1,6 @@
 FROM denoland/deno:1.33.3
 WORKDIR /app
-EXPOSE 8000
+EXPOSE 8100
 ADD . /app
 USER deno
 RUN deno cache src/app.ts

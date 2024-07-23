@@ -14,5 +14,12 @@
   {
     "type":"twitter",
     "url": "VIAwesome"
+  },
+  {
+    "type":"vancouverisawesome",
+    "url": "https://www.vancouverisawesome.com/local-events?_evDiscoveryPath=/"
+  },{
+    "type":"vancouverisawesomeskip",
+    "url": "https://www.vancouverisawesome.com/local-events?_evDiscoveryPath=/&evPage=2"
   }
 ]

@@ -5,4 +5,4 @@ services:
     build: .
     container_name: deno-news-bot
     ports:
-      - "8000:8000"
+      - "8100:8100"
